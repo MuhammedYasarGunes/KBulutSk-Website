@@ -1,0 +1,107 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Oyuncu Yönetimi - Karabağlar SK{% endblock %}
+
+{% block content %}
+    <!-- Üst Başlık ve Aksiyon Butonu -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
+        <h1 class="page-title" style="margin-bottom: 0;">Oyuncu Yönetimi</h1>
+        <a href="{% url 'dashboard:oyuncu_ekle' %}" 
+   style="background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(67, 24, 255, 0.15);"
+   onmouseover="this.style.opacity='0.9'; this.style.transform='translateY(-1px)'"
+   onmouseout="this.style.opacity='1'; this.style.transform='translateY(0)'">
+    <i class='bx bx-user-plus' style="font-size: 20px;"></i> 
+    Yeni Oyuncu Ekle
+</a>
+    </div>
+
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="color: var(--text-main); font-weight: 600;">Kayıtlı Tüm Oyuncular</h3>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+                        <th style="padding: 15px 10px; font-weight: 500; width: 50px;">#No</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Oyuncu Adı</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Takım / Kategori</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Mevki</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Kayıt Tarihi</th>
+                        <th style="padding: 15px 10px; font-weight: 500; text-align: center;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for oyuncu in oyuncular %}
+                    <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                        
+                        <!-- Forma Numarası (Model: numara) -->
+                        <td style="padding: 15px 10px;">
+                            <span style="display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; font-weight: 700; color: var(--primary-color);">
+                                {{ oyuncu.numara }}
+                            </span>
+                        </td>
+
+                        <!-- Oyuncu Adı (Model: ad) -->
+                        <td style="padding: 15px 10px;">
+                            <div style="font-weight: 600; color: var(--text-main);">{{ oyuncu.ad }}</div>
+                        </td>
+
+                        <!-- Bağlı Olduğu Takım (Model: takim.ad) -->
+                        <td style="padding: 15px 10px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                {% if oyuncu.takim.logo %}
+                                    <img src="{{ oyuncu.takim.logo.url }}" style="width: 24px; height: 24px; object-fit: contain;">
+                                {% else %}
+                                    <i class='bx bx-shield-quarter' style="color: var(--text-muted);"></i>
+                                {% endif %}
+                                <span style="font-weight: 500;">{{ oyuncu.takim.ad }}</span>
+                            </div>
+                        </td>
+
+                        <!-- Pozisyon (Model: pozisyon) -->
+                        <td style="padding: 15px 10px;">
+                            <span style="background: rgba(163, 174, 208, 0.1); color: var(--text-main); padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 500; border: 1px solid var(--border-color);">
+                                {{ oyuncu.pozisyon }}
+                            </span>
+                        </td>
+
+                        <!-- Kayıt Tarihi (Model: olusturma_tarihi) -->
+                        <td style="padding: 15px 10px; color: var(--text-muted); font-size: 14px;">
+                            {{ oyuncu.olusturma_tarihi|date:"d M Y" }}
+                        </td>
+
+                        <!-- İşlemler -->
+                        <td style="padding: 15px 10px; text-align: center;">
+                            <button style="border: none; background: transparent; color: var(--text-muted); cursor: pointer; margin: 0 5px; font-size: 18px; transition: color 0.2s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'" title="Düzenle">
+                                <a href="{% url 'dashboard:oyuncu_duzenle' oyuncu.pk %}" 
+   style="color: var(--text-muted); text-decoration: none; margin: 0 5px; font-size: 18px; transition: color 0.2s;"
+   onmouseover="this.style.color='var(--primary-color)'" 
+   onmouseout="this.style.color='var(--text-muted)'"
+   title="Düzenle">
+    <i class='bx bx-edit-alt'></i>
+</a>
+                            </button>
+                            <button style="border: none; background: transparent; color: var(--text-muted); cursor: pointer; margin: 0 5px; font-size: 18px; transition: color 0.2s;" onmouseover="this.style.color='#ee5d50'" onmouseout="this.style.color='var(--text-muted)'" title="Sil">
+                                <a href="{% url 'dashboard:oyuncu_sil' oyuncu.pk %}" 
+   onclick="return confirm('Oyuncuyu silmek istiyor musunuz?')"
+   class="delete-btn">
+   <i class='bx bx-trash'></i>
+</a>
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="padding: 30px; text-align: center; color: var(--text-muted);">
+                            <i class='bx bx-user-x' style="font-size: 40px; display: block; margin-bottom: 10px;"></i>
+                            Henüz hiç oyuncu eklenmemiş.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

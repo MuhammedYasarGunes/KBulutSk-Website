@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetim Paneli Girişi | Karabağlar SK</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #4318ff;
+            --secondary: #2b3674;
+            --text-main: #1b2559;
+            --text-muted: #a3aed0;
+            --bg-body: #f4f7fe;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: white;
+        }
+
+        /* Sol Taraf - Görsel ve Marka */
+        .brand-section {
+            flex: 1.2;
+            background: linear-gradient(135deg, var(--primary), #3311cc);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-section::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            top: -100px;
+            left: -100px;
+        }
+
+        .brand-logo i { font-size: 120px; margin-bottom: 20px; }
+        .brand-section h1 { font-size: 42px; font-weight: 800; margin: 0; text-align: center; }
+        .brand-section p { font-size: 18px; opacity: 0.8; margin-top: 15px; text-align: center; max-width: 400px; }
+
+        /* Sağ Taraf - Form */
+        .login-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background-color: var(--bg-body);
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card h2 { color: var(--text-main); font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+        .login-card p { color: var(--text-muted); margin-bottom: 35px; }
+
+        .form-group { margin-bottom: 20px; position: relative; }
+        .form-group label { display: block; font-weight: 600; color: var(--text-main); font-size: 14px; margin-bottom: 8px; }
+        
+        .input-wrapper { position: relative; }
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 1px solid #e0e5f2;
+            border-radius: 16px;
+            box-sizing: border-box;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 10px 20px rgba(67, 24, 255, 0.05); }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(67, 24, 255, 0.2);
+        }
+
+        .login-btn:hover { background: #3311cc; transform: translateY(-2px); box-shadow: 0 15px 25px rgba(67, 24, 255, 0.25); }
+
+        .error-msg {
+            background: #fff5f5;
+            color: #ee5d50;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #fed7d7;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .brand-section { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="brand-section">
+    <div class="brand-logo"><i class='bx bx-shield-quarter'></i></div>
+    <h1>Karabağlar SK</h1>
+    <p>Geleceğin yıldızlarını yetiştiren kulübün yönetim merkezi.</p>
+</div>
+
+<div class="login-section">
+    <div class="login-card">
+        <h2>Giriş Yap</h2>
+        <p>Lütfen yetkili bilgilerinizi girin.</p>
+
+        {% if form.errors %}
+            <div class="error-msg">
+                <i class='bx bx-error-circle'></i> Bilgiler hatalı, lütfen kontrol edin.
+            </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Kullanıcı Adı</label>
+                <div class="input-wrapper">
+                    <i class='bx bx-user'></i>
+                    <input type="text" name="username" placeholder="Kullanıcı adınız" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Şifre</label>
+                <div class="input-wrapper">
+                    <i class='bx bx-lock-alt'></i>
+                    <input type="password" name="password" id="password" placeholder="••••••••" required>
+                    <i class='bx bx-show toggle-password' id="toggleIcon" style="width: 25px;"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn">Panele Eriş</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const toggleIcon = document.querySelector('#toggleIcon');
+    const passwordInput = document.querySelector('#password');
+
+    toggleIcon.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        toggleIcon.classList.toggle('bx-show');
+        toggleIcon.classList.toggle('bx-hide');
+    });
+</script>
+
+</body>
+</html>

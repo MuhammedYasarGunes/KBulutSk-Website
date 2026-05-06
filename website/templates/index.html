@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cloudinary %}
+
+{% block title %}Ana Sayfa - K. Bulut SK Spor Kulübü{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/index-page.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="main-content">
+
+    <!-- ═══════════════════════════════════════════
+         SLIDER — 9 Slide
+    ═══════════════════════════════════════════ -->
+    <div class="slider-container">
+        <div class="slider">
+
+            <div class="slide" style="background: linear-gradient(135deg, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0) 100%), url('{% static "img/slider/slide1.jpeg" %}') center/cover no-repeat;">
+                <div class="slide-content"><h1>Hoş Geldiniz</h1><p>K. Bulut SK Resmi Web Sitesi</p></div>
+            </div>
+            <div class="slide" style="background: linear-gradient(135deg, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0) 100%), url('{% static "img/slider/slide2.jpeg" %}') center/cover no-repeat;">
+                <div class="slide-content"><h1>Takımımız</h1><p>En iyi sporcularımızla tanışın</p></div>
+            </div>
+            <div class="slide" style="background: linear-gradient(135deg, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0) 100%), url('{% static "img/slider/slide3.jpeg" %}') center 60%/cover no-repeat;">
+                <div class="slide-content"><h1>Başarılarımız</h1><p>Sizinle birlikte başarıya ulaşıyoruz</p></div>
+            </div>
+            <div class="slide" style="background: linear-gradient(135deg, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0) 100%), url('{% static "img/slider/slide4.jpeg" %}') center 80%/cover no-repeat; ">
+                <div class="slide-content"><h1>Antrenmanlar</h1><p>Her gün daha iyiye ulaşmak için çalışıyoruz</p></div>
+            </div>
+            <div class="slide" style="background: linear-gradient(135deg, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0) 100%), url('{% static "img/slider/slide5.jpeg" %}') center 65%/cover no-repeat;">
+                <div class="slide-content"><h1>Maçlarımız</h1><p>Sahada gösterilen azim ve tutku</p></div>
+            </div>
+            <div class="slide" style="background: linear-gradient(135deg, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0) 100%), url('{% static "img/slider/slide6.jpeg" %}') center/cover no-repeat;">
+                <div class="slide-content"><h1>Taraftarlarımız</h1><p>Sizin desteğinizle daha güçlüyüz</p></div>
+            </div>
+            <div class="slide" style="background: linear-gradient(135deg, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0) 100%), url('{% static "img/slider/slide7.jpeg" %}') center 40%/cover no-repeat;">
+                <div class="slide-content"><h1>Altyapı</h1><p>Geleceğin yıldızlarını yetiştiriyoruz</p></div>
+            </div>
+            <div class="slide" style="background: linear-gradient(135deg, rgba(26,26,26,0.3) 0%, rgba(26,26,26,0) 100%), url('{% static "img/slider/slide8.jpeg" %}') center 70%/cover no-repeat;">
+                <div class="slide-content"><h1>Kupa Yolculuğu</h1><p>Şampiyonluğa giden zorlu ama onurlu yol</p></div>
+            </div>
+
+
+        </div>
+
+        <button class="slider-nav prev" id="sliderPrev">&#10094;</button>
+        <button class="slider-nav next" id="sliderNext">&#10095;</button>
+        <div class="dots-container" id="dotsContainer"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         SON HABERLER
+    ═══════════════════════════════════════════ -->
+    <section class="newsletter-section">
+        <div class="newsletter-header">
+            <h2 style="color:black;">Son Haberler</h2>
+            <p style="color:black;">Takımımızdan en son gelişmeleri takip edin</p>
+        </div>
+
+        <div class="newsletter-container">
+            <div class="newsletter-cards" id="newsCardsRow">
+                {% for haber in haberler %}
+
+    {% if haber.görsel %}
+        {% cloudinary_url haber.görsel.public_id width=600 height=400 crop="fill" quality="auto" fetch_format="auto" as card_thumb %}
+    {% else %}
+        {% with card_thumb="" %}
+        {% endwith %}
+    {% endif %}
+
+    <div class="news-card">
+        <div class="card-image"
+             style="{% if card_thumb %}background-image: url('{{ card_thumb }}');{% else %}background: linear-gradient(135deg,#00ffcc 0%,#00d9ff 100%);{% endif %} background-size: cover; background-position: center;">
+        </div>
+        <div class="card-content">
+            <span class="card-date">{{ haber.yayınlama_tarihi|date:"j E Y" }}</span>
+            <h3>{{ haber.başlık }}</h3>
+            <p>{{ haber.içerik|truncatewords:15 }}</p>
+            <button class="read-more-btn" data-news-id="{{ forloop.counter }}">
+                Devamını Oku <span class="btn-arrow">→</span>
+            </button>
+        </div>
+    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Modal -->
+<div class="nd-overlay" id="newsDetailPanel">
+    <div class="nd-modal">
+        <button class="nd-close" id="ndCloseBtn" aria-label="Kapat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="24" height="24">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        <div class="nd-header">
+            <div class="nd-cover" id="detailCover"></div>
+            <div class="nd-meta">
+                <span class="nd-date"  id="detailDate"></span>
+                <h2   class="nd-title" id="detailTitle"></h2>
+                <div  class="nd-tags"  id="detailTags"></div>
+            </div>
+        </div>
+        <div class="nd-body" id="detailBody"></div>
+    </div>
+</div>
+
+
+
+
+
+{% block extra_js %}
+<script>
+window.haberlerData = [
+    {% for haber in haberler %}
+    {
+        id:        {{ forloop.counter }},
+        baslik:    "{{ haber.başlık|escapejs }}",
+        tarih:     "{{ haber.yayınlama_tarihi|date:'j E Y' }}",
+        icerik:    "{{ haber.içerik|escapejs }}",
+        kapak:     "{% if haber.görsel %}{% cloudinary_url haber.görsel quality='auto' fetch_format='auto' crop='fill' width=800 height=450 %}{% endif %}",
+        etiketler: []
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+];
+</script>
+<script src="{% static 'js/index-page.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

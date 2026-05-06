@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cloudinary %}
+
+{% block title %}Takım - K. Bulut SK Spor Kulübü{% endblock %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/team-page.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+
+
+<main class="main-content team-page">
+  <div class="section-header">
+    <h1>Takımlar</h1>
+    <p>K. Bulut SK Spor Kulübü</p>
+  </div>
+
+  <!-- ── TEAM CARDS ── -->
+  <div class="teams-grid" style="margin-top: 5vh;">
+    {% for tak in takim %}
+    <div class="team-card"
+    data-takim="{{ tak.id }}"
+         data-takim-ad="{{ tak.ad }}"
+         onclick="openTeam(this)">
+      <div class="team-card-banner"
+     style="{% if tak.logo %}
+        {% cloudinary_url tak.logo.public_id crop='fill' width=400 height=200 quality='auto' fetch_format='auto' as logo_url %}
+        background-image: url('{{ logo_url }}');
+     {% else %}
+        background: linear-gradient(135deg,#00ffcc,#00d9ff);
+     {% endif %}
+     background-size: cover;
+     background-position: center;">
+</div>
+      <div class="team-card-body">
+        <h2>{{ tak.ad }}</h2>
+      </div>
+      <div class="team-card-arrow">
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</main>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightboxOutside(event)">
+  <div class="lightbox-panel" id="lightboxPanel">
+
+    <div class="lb-header" id="lbHeader">
+      <div class="lb-icon" id="lbIcon"></div>
+      <div class="lb-title">
+        <h2 id="lbTeamName">Takım</h2>
+        <span id="lbTeamCategory">Oyuncular</span>
+      </div>
+      <button class="lb-close" onclick="closeLightbox()" aria-label="Kapat">&#x2715;</button>
+    </div>
+
+    <div class="lb-body">
+      <div class="lb-players-grid" id="lbPlayersGrid">
+        <!-- JS ile doldurulur -->
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+{% block extra_js %}
+<script src="{% static 'js/team-page.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Maçlar - K. Bulut SK Spor Kulübü{% endblock %}
+
+{% block content %}
+    <!-- MATCHES PAGE -->
+    <main class="main-content matches-page">
+        <div class="section-header">
+            <h1>Maçlar</h1>
+            <p>Sezon Maçları ve Sonuçları</p>
+        </div>
+
+        <section class="matches-section">
+            <div class="matches-container">
+                <div class="matches-lz">
+                    {% for mac in tüm_maçlar %}
+                    <div class="match-card {% if mac.durum == 'kazanıldı' %}winner{% elif mac.durum == 'berabere' %}draw{% elif mac.durum == 'kaybedildi' %}loser{% else %}upcoming{% endif %}">
+                        <div class="match-date">{{ mac.tarih|date:"j E Y - H:i" }} | {{ mac.lig }}</div>
+                        <div class="match-content">
+                            <div class="team">
+                                <div class="team-name">{{ mac.ev_sahibi }}</div>
+                                <div class="team-score">{{ mac.ev_sahibi_gol }}</div>
+                            </div>
+                            <div class="match-vs">
+                                <span class="vs-text">VS</span>
+                                <span class="match-status">
+                                    {% if mac.durum == 'kazanıldı' %}
+                                        <span style="color: #00ffcc;">Kazanıldı</span>
+                                    {% elif mac.durum == 'berabere' %}
+                                        <span style="color: #ffd700;">Berabere</span>
+                                    {% elif mac.durum == 'kaybedildi' %}
+                                        <span style="color: #ff006e;">Kaybedildi</span>
+                                    {% else %}
+                                        <span style="color: #00d9ff;">Gelecek</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="team">
+                                <div class="team-name">{{ mac.misafir }}</div>
+                                <div class="team-score">{{ mac.misafir_gol }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- Varsayılan maçlar (veritabanı boşsa) -->
+                    {% if not tüm_maçlar %}
+                    <div class="match-card winner">
+                        <div class="match-date">15 Nisan 2026 - 19:00 | Süper Lig</div>
+                        <div class="match-content">
+                            <div class="team">
+                                <div class="team-name">K. Bulut SK</div>
+                                <div class="team-score">3</div>
+                            </div>
+                            <div class="match-vs">
+                                <span class="vs-text">VS</span>
+                                <span class="match-status" style="color: #00ffcc;">Kazanıldı</span>
+                            </div>
+                            <div class="team">
+                                <div class="team-name">Rakip Takım</div>
+                                <div class="team-score">1</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-card draw">
+                        <div class="match-date">12 Nisan 2026 - 18:30 | Süper Lig</div>
+                        <div class="match-content">
+                            <div class="team">
+                                <div class="team-name">K. Bulut SK</div>
+                                <div class="team-score">2</div>
+                            </div>
+                            <div class="match-vs">
+                                <span class="vs-text">VS</span>
+                                <span class="match-status" style="color: #ffd700;">Berabere</span>
+                            </div>
+                            <div class="team">
+                                <div class="team-name">Rakip Takım</div>
+                                <div class="team-score">2</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-card loser">
+                        <div class="match-date">10 Nisan 2026 - 20:00 | Süper Lig</div>
+                        <div class="match-content">
+                            <div class="team">
+                                <div class="team-name">K. Bulut SK</div>
+                                <div class="team-score">1</div>
+                            </div>
+                            <div class="match-vs">
+                                <span class="vs-text">VS</span>
+                                <span class="match-status" style="color: #ff006e;">Kaybedildi</span>
+                            </div>
+                            <div class="team">
+                                <div class="team-name">Rakip Takım</div>
+                                <div class="team-score">2</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-card upcoming">
+                        <div class="match-date">22 Nisan 2026 - 19:00 | Süper Lig</div>
+                        <div class="match-content">
+                            <div class="team">
+                                <div class="team-name">K. Bulut SK</div>
+                                <div class="team-score">-</div>
+                            </div>
+                            <div class="match-vs">
+                                <span class="vs-text">VS</span>
+                                <span class="match-status" style="color: #00d9ff;">Gelecek</span>
+                            </div>
+                            <div class="team">
+                                <div class="team-name">Rakip Takım</div>
+                                <div class="team-score">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-card winner">
+                        <div class="match-date">8 Nisan 2026 - 17:00 | Kupa</div>
+                        <div class="match-content">
+                            <div class="team">
+                                <div class="team-name">K. Bulut SK</div>
+                                <div class="team-score">5</div>
+                            </div>
+                            <div class="match-vs">
+                                <span class="vs-text">VS</span>
+                                <span class="match-status" style="color: #00ffcc;">Kazanıldı</span>
+                            </div>
+                            <div class="team">
+                                <div class="team-name">Rakip Takım</div>
+                                <div class="team-score">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="match-card winner">
+                        <div class="match-date">5 Nisan 2026 - 19:00 | Süper Lig</div>
+                        <div class="match-content">
+                            <div class="team">
+                                <div class="team-name">K. Bulut SK</div>
+                                <div class="team-score">2</div>
+                            </div>
+                            <div class="match-vs">
+                                <span class="vs-text">VS</span>
+                                <span class="match-status" style="color: #00ffcc;">Kazanıldı</span>
+                            </div>
+                            <div class="team">
+                                <div class="team-name">Rakip Takım</div>
+                                <div class="team-score">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>                
+            </div>
+        </section>
+    </main>
+{% endblock %}

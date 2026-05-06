@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}İletişim - K. Bulut SK Spor Kulübü{% endblock %}
+
+{% block extra_css %} 
+<style>
+    /* ==========================================
+       ANTRENMAN PROGRAMI ÖZEL CSS (TAM RESPONSIVE)
+       ========================================== */
+    .schedule-section {
+        padding: 40px 0; /* Üst alt boşluk */
+        width: 100%;
+        margin-top: 20px;
+    }
+    .schedule-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .schedule-header h2 {
+        color: #fff;
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    .schedule-header p {
+        color: #b0b0b0;
+        font-size: 1.1rem;
+    }
+    .schedule-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        width: 100%;
+    }
+    .schedule-card {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        border-radius: 12px;
+        padding: 24px;
+        border-left: 5px solid #00ffcc;
+        position: relative;
+        overflow: hidden;
+    }
+    .schedule-card.fitness-card {
+        border-left-color: #ff4757;
+    }
+    .schedule-day {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        color: #ddd;
+        font-size: 1rem;
+    }
+    .info-row svg {
+        flex-shrink: 0;
+        color: #00ffcc;
+    }
+    .fitness-card .info-row svg {
+        color: #ff4757;
+    }
+    .schedule-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 255, 204, 0.1);
+        color: #00ffcc;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+    .fitness-card .schedule-badge {
+        background: rgba(255, 71, 87, 0.1);
+        color: #ff4757;
+    }
+
+    /* MOBİL EKRANLAR İÇİN KESİN ZORLAMA */
+    @media (max-width: 768px) {
+        .schedule-grid {
+            grid-template-columns: 1fr; /* 768px altında kartlar kesinlikle alt alta dizilir */
+        }
+        .schedule-card {
+            margin-bottom: 15px; /* Alt alta dizilince aralarında boşluk olsun */
+        }
+        .schedule-header h2 {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- CONTACT PAGE -->
+    <main class="main-content contact-page">
+        <div class="section-header">
+            <h1>İletişim</h1>
+            <p>Bize ulaşın, sorularınız önemlidir</p>
+        </div>
+
+        <section class="contact-section">
+            <div class="contact-container">
+                
+                <!-- ÜST KISIM: İLETİŞİM BİLGİLERİ -->
+                <div class="contact-grid" style="grid-template-columns: 1fr; max-width: 600px; margin: 0 auto;">
+                    <!-- Contact Info -->
+                    <div class="contact-info">
+                        <div class="info-box">
+                            <h3>Adres</h3>
+                            <p>229 sok. No : 1 Muratreis Mah. Konak/İzmir<br>Türkiye</p>
+                        </div>
+
+                        <div class="info-box">
+                            <h3>Telefon</h3>
+                            <p><a href="tel:+905551234567" style="color: #00ffcc; text-decoration: none;">+90 (553) 907-1231</a></p>
+                        </div>
+
+                        <div class="info-box">
+                            <h3>E-posta</h3>
+                            <p><a href="mailto:info@kbulutsk.com" style="color: #00ffcc; text-decoration: none;">info@kbulutsk.com</a></p>
+                        </div>
+
+                        <div class="info-box">
+                            <h3>Çalışma Saatleri</h3>
+                            <p>Pazartesi - Cuma: 09:00 - 18:00<br>Cumartesi: 10:00 - 14:00<br>Pazar: Kapalı</p>
+                        </div>
+                        
+                        <!-- Social Media -->
+                        <div class="social-box">
+                            <h3>Sosyal Medya</h3>
+                            <div class="social-links" style="margin-bottom: 15px;">
+                                <a href="https://www.instagram.com/karabaglar_atletik_sk/" target="_blank" rel="noopener noreferrer" class="social-btn instagram" title="Instagram">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="24" height="24" fill="currentColor">
+                                      <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- /Üst Kısım Bitiş -->
+
+                <!-- ORTA KISIM: ANTRENMAN PROGRAMI -->
+                <section class="schedule-section">
+                    <div class="schedule-header">
+                        <h2>Haftalık Antrenman Programı</h2>
+                        <p>Takım ve bireysel kondisyon çalışmalarımız</p>
+                    </div>
+
+                    <div class="schedule-grid">
+                        <!-- Pazartesi -->
+                        <div class="schedule-card">
+                            <span class="schedule-badge">Saha</span>
+                            <div class="schedule-day">Pazartesi</div>
+                            <div class="info-row">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                                <span>20:00</span>
+                            </div>
+                            <div class="info-row">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span>Yeşilyurt Sahası</span>
+                            </div>
+                        </div>
+
+                        <!-- Salı -->
+                        <div class="schedule-card">
+                            <span class="schedule-badge">Saha</span>
+                            <div class="schedule-day">Salı</div>
+                            <div class="info-row">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                                <span>18:00</span>
+                            </div>
+                            <div class="info-row">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span>Yeşilyurt Sahası</span>
+                            </div>
+                        </div>
+
+                        <!-- Çarşamba -->
+                        <div class="schedule-card">
+                            <span class="schedule-badge">Saha</span>
+                            <div class="schedule-day">Çarşamba</div>
+                            <div class="info-row">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                                <span>22:00</span>
+                            </div>
+                            <div class="info-row">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span>Yeşilyurt Sahası</span>
+                            </div>
+                        </div>
+
+                        <!-- Cuma -->
+                        <div class="schedule-card">
+                            <span class="schedule-badge">Saha</span>
+                            <div class="schedule-day">Cuma</div>
+                            <div class="info-row">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                                <span>22:00</span>
+                            </div>
+                            <div class="info-row">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span>Yeşilyurt Sahası</span>
+                            </div>
+                        </div>
+
+                        <!-- Hafta Sonu -->
+                        <div class="schedule-card fitness-card">
+                            <span class="schedule-badge">Kondisyon</span>
+                            <div class="schedule-day">Cmt / Pazar</div>
+                            <div class="info-row">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                                <span>Serbest Saat</span>
+                            </div>
+                            <div class="info-row">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span>Mayme Spor Center</span>
+                            </div>
+                        </div>
+                    </div>
+                </section> <!-- /Orta Kısım Bitiş -->
+
+                <!-- ALT KISIM: HARİTALAR -->
+                <div class="map-container" style="margin-top: 60px;">
+                    <h3 style="text-align: center; color: white; margin-bottom: 24px; color: #1a1a1a;">Konumumuz</h3>
+                    <div class="map-placeholder">
+                        <div id="map" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); width: 100%; height: 400px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #b0b0b0;">
+                        <iframe
+                        width="100%"
+                        height="400"
+                        style="border:0;"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps?q=38.402982,27.106812&hl=tr&z=18&output=embed">
+                        </iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="map-container" style="margin-top: 60px;">
+                    <h3 style="text-align: center; color: white; margin-bottom: 24px; color: #1a1a1a;">Fitness Salonumuz</h3>
+                    <div class="map-placeholder">
+                        <div id="map" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); width: 100%; height: 400px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #b0b0b0;">
+                        <iframe
+                        width="100%"
+                        height="400"
+                        style="border:0;"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3126.5623258094806!2d27.1290731!3d38.4053677!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14bbd95b2aa00d1b%3A0x3c61214fbaa9234d!2sMaymesporcenter!5e0!3m2!1str!2str!4v1777227352376!5m2!1str!2str">
+                        </iframe>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form validation (Formu sildiysen bu kısmı tutmana gerek yok, ama dursun zararı olmaz)
+    const form = document.querySelector('.contact-form');
+    if(form) {
+        form.addEventListener('submit', function(e) {
+            const ad = document.getElementById('ad').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const konu = document.getElementById('konu').value.trim();
+            const mesaj = document.getElementById('mesaj').value.trim();
+
+            if (!ad || !email || !konu || !mesaj) {
+                e.preventDefault();
+                alert('Lütfen tüm alanları doldurunuz!');
+            }
+        });
+    }
+</script>
+{% endblock %}

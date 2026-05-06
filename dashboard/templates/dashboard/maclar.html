@@ -1,0 +1,135 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Maçlar - Karabağlar SK{% endblock %}
+
+{% block content %}
+    <!-- Üst Başlık ve Aksiyon Butonu -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
+        <h1 class="page-title" style="margin-bottom: 0;">Maç Yönetimi</h1>
+        <a href="{% url 'dashboard:mac_ekle' %}" 
+   style="background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(67, 24, 255, 0.15);"
+   onmouseover="this.style.opacity='0.9'; this.style.transform='translateY(-1px)'"
+   onmouseout="this.style.opacity='1'; this.style.transform='translateY(0)'">
+    <i class='bx bx-user-plus' style="font-size: 20px;"></i> 
+    Yeni Maç Ekle
+</a>
+    </div>
+
+    <!-- Maçlar Tablosu -->
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+            <h3 style="color: var(--text-main); font-weight: 600;">Tüm Maçlar</h3>
+            
+            <!-- Filtreleme Alanı -->
+            <div style="display: flex; gap: 15px;">
+                <select style="background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 15px; color: var(--text-main); outline: none; cursor: pointer;">
+                    <option value="">Tüm Takımlar</option>
+                    <option value="A">A Takım</option>
+                    <option value="U19">U19 Takımı</option>
+                </select>
+                <select style="background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 15px; color: var(--text-main); outline: none; cursor: pointer;">
+                    <option value="">Tüm Durumlar</option>
+                    <option value="gelecek">Oynanmadı</option>
+                    <option value="oynandi">Oynandı (Hepsi)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+                        <th style="padding: 15px 10px; font-weight: 500;">Tarih</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Kategori / Lig</th>
+                        <th style="padding: 15px 10px; font-weight: 500; text-align: center;">Eşleşme & Skor</th>
+                        <th style="padding: 15px 10px; font-weight: 500; text-align: center;">Durum</th>
+                        <th style="padding: 15px 10px; font-weight: 500; text-align: center;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mac in maclar %}
+                    <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                        
+                        <!-- Tarih -->
+                        <td style="padding: 15px 10px;">
+                            <div style="color: var(--text-main); font-weight: 600;">{{ mac.tarih|date:"d M Y" }}</div>
+                            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                                <i class='bx bx-time'></i> {{ mac.tarih|date:"H:i" }}
+                            </div>
+                        </td>
+
+                        <!-- Takım ve Lig -->
+                        <td style="padding: 15px 10px;">
+                            <div style="font-weight: 600; color: var(--text-main);">{{ mac.takim.ad }}</div>
+                            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">{{ mac.lig }}</div>
+                        </td>
+
+                        <!-- Eşleşme ve Skor (Yatay Tasarım) -->
+                        <td style="padding: 15px 10px; text-align: center; white-space: nowrap;">
+                            <span style="font-weight: 600; color: var(--text-main); display: inline-block; width: 120px; text-align: right;">
+                                {{ mac.ev_sahibi }}
+                            </span>
+                            
+                            <span style="margin: 0 15px; background: var(--bg-color); padding: 6px 15px; border-radius: 8px; font-weight: bold; font-size: 16px; color: var(--primary-color); display: inline-block; width: 60px; text-align: center;">
+                                {% if mac.durum == 'gelecek' %}
+                                    <span style="color: var(--text-muted); font-size: 14px;">VS</span>
+                                {% else %}
+                                    {{ mac.ev_sahibi_gol }} - {{ mac.misafir_gol }}
+                                {% endif %}
+                            </span>
+                            
+                            <span style="font-weight: 600; color: var(--text-muted); display: inline-block; width: 120px; text-align: left;">
+                                {{ mac.misafir }}
+                            </span>
+                        </td>
+
+                        <!-- Dinamik Durum Rozetleri -->
+                        <td style="padding: 15px 10px; text-align: center;">
+                            {% if mac.durum == 'kazanildi' %}
+                                <span style="background: rgba(5, 205, 153, 0.1); color: #05CD99; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">{{ mac.get_durum_display }}</span>
+                            {% elif mac.durum == 'kaybedildi' %}
+                                <span style="background: rgba(238, 93, 80, 0.1); color: #ee5d50; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">{{ mac.get_durum_display }}</span>
+                            {% elif mac.durum == 'berabere' %}
+                                <span style="background: rgba(163, 174, 208, 0.2); color: var(--text-muted); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">{{ mac.get_durum_display }}</span>
+                            {% elif mac.durum == 'gelecek' %}
+                                <span style="background: rgba(255, 153, 0, 0.1); color: #ff9900; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">{{ mac.get_durum_display }}</span>
+                            {% else %}
+                                <span style="background: rgba(67, 24, 255, 0.1); color: var(--primary-color); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">{{ mac.get_durum_display }}</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- İşlemler -->
+                        <td style="padding: 15px 10px; text-align: center;">
+                            <button style="border: none; background: transparent; color: var(--text-muted); cursor: pointer; margin: 0 5px; font-size: 18px; transition: color 0.2s;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-muted)'" title="Skor Gir / Düzenle">
+                                <a href="{% url 'dashboard:mac_duzenle' mac.pk %}" 
+   style="color: var(--text-muted); text-decoration: none; margin: 0 5px; font-size: 18px; transition: color 0.2s;"
+   onmouseover="this.style.color='var(--primary-color)'" 
+   onmouseout="this.style.color='var(--text-muted)'"
+   title="Düzenle">
+    <i class='bx bx-edit-alt'></i>
+</a>
+                            </button>
+                            <button style="border: none; background: transparent; color: var(--text-muted); cursor: pointer; margin: 0 5px; font-size: 18px; transition: color 0.2s;" onmouseover="this.style.color='#ee5d50'" onmouseout="this.style.color='var(--text-muted)'" title="Sil">
+                                <a href="{% url 'dashboard:mac_sil' mac.pk %}" 
+   onclick="return confirm('Maç verisini silmek istiyor musunuz?')"
+   class="delete-btn">
+   <i class='bx bx-trash'></i>
+</a>
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="padding: 15px 10px; text-align: center; color: var(--text-muted);">
+                            <div style="padding: 20px 0;">
+                                <i class='bx bx-calendar-x' style="font-size: 48px; color: #e2e8f0; margin-bottom: 10px;"></i>
+                                <p>Sisteme henüz maç eklenmemiş.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

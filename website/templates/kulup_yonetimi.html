@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Kulüp Yönetimi{% endblock %}
+
+{% block extra_css %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --navy:       #0d1b2a;
+    --navy-mid:   #1a2e45;
+    --navy-light: #243b55;
+    --gold:       #c9a84c;
+    --gold-light: #e8c97a;
+    --cream:      #f5f0e8;
+    --text-muted: #8a9bb0;
+    --card-bg:    #14263d;
+    --border:     rgba(201,168,76,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Hero banner ─────────────────────────────────────── */
+  .yonetim-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .yonetim-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 30%, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .yonetim-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .hero-title span {
+    color: var(--gold-light);
+    font-style: italic;
+  }
+
+  .hero-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .hero-divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    margin: 28px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── Section wrapper ──────────────────────────────────── */
+  .yonetim-section {
+    background: var(--navy);
+    min-height: 100vh;
+    padding: 72px 24px 100px;
+  }
+
+  .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--cream);
+    text-align: center;
+    margin-bottom: 56px;
+    font-weight: 600;
+  }
+
+  /* ── Grid ─────────────────────────────────────────────── */
+  .yonetim-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(270px, 1fr));
+    gap: 28px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── Card ─────────────────────────────────────────────── */
+  .uye-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .uye-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.4);
+    border-color: rgba(201,168,76,0.5);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* stagger */
+  .uye-card:nth-child(1) { animation-delay: 0.05s; }
+  .uye-card:nth-child(2) { animation-delay: 0.12s; }
+  .uye-card:nth-child(3) { animation-delay: 0.19s; }
+  .uye-card:nth-child(4) { animation-delay: 0.26s; }
+  .uye-card:nth-child(5) { animation-delay: 0.33s; }
+  .uye-card:nth-child(6) { animation-delay: 0.40s; }
+
+  /* gold accent stripe top */
+  .uye-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .uye-card:hover::before { opacity: 1; }
+
+  /* Photo area */
+  .card-photo-wrap {
+    position: relative;
+    height: 220px;
+    background: linear-gradient(160deg, var(--navy-light), var(--navy-mid));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .card-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;  /* ← bu satır, 20% yukarı kaydırır */
+  display: block;
+}
+
+  .uye-card:hover .card-photo-wrap img {
+    transform: scale(1.05);
+    filter: brightness(1) saturate(1);
+  }
+
+  /* Placeholder avatar */
+  .avatar-placeholder {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: var(--navy-light);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+
+  /* Unvan badge */
+  .unvan-badge {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    background: rgba(13,27,42,0.85);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+  }
+
+  /* Card body */
+  .card-body {
+    padding: 22px 22px 20px;
+  }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .card-role {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+
+  .card-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+    margin-bottom: 16px;
+  }
+
+  /* Phone */
+  .card-phone {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .card-phone:hover { color: var(--gold-light); }
+
+  .phone-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .card-phone:hover .phone-icon {
+    background: rgba(201,168,76,0.22);
+  }
+
+  .phone-icon svg {
+    width: 14px; height: 14px;
+    stroke: var(--gold);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── Footer note ─────────────────────────────────────── */
+  .yonetim-footer-note {
+    text-align: center;
+    margin-top: 64px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .yonetim-footer-note strong {
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* ── Responsive ──────────────────────────────────────── */
+  @media (max-width: 600px) {
+    .yonetim-hero { padding: 56px 20px 44px; }
+    .yonetim-section { padding: 52px 16px 80px; }
+    .yonetim-grid { grid-template-columns: 1fr; gap: 20px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ──────────────────────────────────────────────── -->
+<section class="yonetim-hero">
+  <p class="hero-eyebrow">{{ club_name|default:"Öğrenci Kulübü" }}</p>
+  <h1 class="hero-title">Yönetim</span> Kurulu</h1>
+  <p class="hero-subtitle">
+    Kulübümüzü kuran ve bugünlere taşıyan değerli üyelerimizi tanıyın.
+  </p>
+  <div class="hero-divider"></div>
+</section>
+
+<!-- ── Üyeler ─────────────────────────────────────────────── -->
+<section class="yonetim-section">
+  <p class="section-label">Ekibimiz</p>
+  <h2 class="section-heading">Kulüp Yönetimi</h2>
+
+  <div class="yonetim-grid">
+
+    {% for uye in kurucular %}
+<article class="uye-card">
+  <div class="card-photo-wrap">
+    {% if uye.foto %}
+  <img src="{{ uye.foto }}" alt="{{ uye.ad_soyad }}" loading="lazy">
+{% else %}
+  <div class="avatar-placeholder">...</div>
+{% endif %}
+    <span class="unvan-badge">{{ uye.unvan }}</span>
+  </div>
+  <div class="card-body">
+    <h3 class="card-name">{{ uye.ad_soyad }}</h3>
+    <p class="card-role">{{ uye.gorev}}</p>
+    <div class="card-divider"></div>
+    <a href="tel:{{ uye.telefon }}" class="card-phone">
+      <span class="phone-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79-19.79 0 0 1-8.63-3.07 19.5-19.5 0 0 1-6-6 19.79-19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </span>
+      {{ uye.telefon }}
+    </a>
+  </div>
+</article>
+{% endfor %}
+
+{% for uye in sabit_uyeler %}
+<article class="uye-card">
+  <div class="card-photo-wrap">
+
+    {# ← avatar-placeholder div'i YOK, direkt if kontrolü #}
+    {% if uye.foto %}
+      <img src="{{ uye.foto }}" alt="{{ uye.ad_soyad }}" loading="lazy">
+    {% else %}
+      <div class="avatar-placeholder">
+        {{ uye.ad_soyad|slice:":1" }}{{ uye.ad_soyad|slice:"-1:" }}
+      </div>
+    {% endif %}
+
+  </div>
+  <div class="card-body">
+    <h3 class="card-name">{{ uye.ad_soyad }}</h3>
+    <p class="card-role">{{ uye.unvan}}</p>
+    <div class="card-divider"></div>
+    <a href="tel:{{ uye.telefon }}" class="card-phone">
+      <span class="phone-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79-19.79 0 0 1-8.63-3.07 19.5-19.5 0 0 1-6-6 19.79-19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </span>
+      {{ uye.telefon }}
+    </a>
+  </div>
+</article>
+{% endfor %}
+  </div>
+</section>
+
+{% endblock %}

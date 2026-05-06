@@ -1,0 +1,133 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Galeri Yönetimi - Karabağlar SK{% endblock %}
+
+{% block content %}
+    <!-- Üst Başlık ve Aksiyon Butonu -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
+        <h1 class="page-title" style="margin-bottom: 0;">Galeri Yönetimi</h1>
+        <a href="{% url 'dashboard:galeri_ekle' %}" 
+   style="background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(67, 24, 255, 0.15);"
+   onmouseover="this.style.opacity='0.9'; this.style.transform='translateY(-1px)'"
+   onmouseout="this.style.opacity='1'; this.style.transform='translateY(0)'">
+    <i class='bx bx-user-plus' style="font-size: 20px;"></i> 
+    Yeni Resim Ekle
+</a>
+    </div>
+
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="color: var(--text-main); font-weight: 600;">Yüklenen Medyalar</h3>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+                        <th style="padding: 15px 10px; font-weight: 500; width: 80px;">Önizleme</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Başlık & Sıra</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Tür</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Kategori</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Eklenme Tarihi</th>
+                        <th style="padding: 15px 10px; font-weight: 500; text-align: center;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for oge in ogeler %}
+                    <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                        
+                        <!-- Önizleme (Thumbnail) Sütunu -->
+                        <td style="padding: 15px 10px;">
+                            <div style="width: 70px; height: 50px; border-radius: 8px; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; color: var(--text-muted); position: relative;">
+                                
+                                {% if oge.is_video %}
+                                    <!-- Video İkonu Overlay -->
+                                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.5); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                                        <i class='bx bx-play'></i>
+                                    </div>
+
+                                    {% if oge.has_local_video and oge.video_thumbnail %}
+                                        <!-- Cloudinary Video Thumbnail -->
+                                        <img src="{{ oge.video_thumbnail }}" style="width: 100%; height: 100%; object-fit: cover;" alt="Video">
+                                    {% elif oge.has_youtube_video %}
+                                        <!-- YouTube Thumbnail -->
+                                        <img src="https://img.youtube.com/vi/{{ oge.get_youtube_id }}/mqdefault.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Youtube">
+                                    {% else %}
+                                        <i class='bx bx-video' style="font-size: 24px;"></i>
+                                    {% endif %}
+                                    
+                                {% else %}
+                                    <!-- Resim Görüntüleme -->
+                                    {% if oge.resim %}
+                                        <img src="{{ oge.resim.url }}" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ oge.başlık }}">
+                                    {% else %}
+                                        <i class='bx bx-image' style="font-size: 24px;"></i>
+                                    {% endif %}
+                                {% endif %}
+                                
+                            </div>
+                        </td>
+
+                        <!-- Başlık ve Sıra -->
+                        <td style="padding: 15px 10px;">
+                            <div style="font-weight: 600; color: var(--text-main);">{{ oge.başlık }}</div>
+                            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Gösterim Sırası: {{ oge.sıra }}</div>
+                        </td>
+
+                        <!-- Tür (Resim/Video) -->
+                        <td style="padding: 15px 10px;">
+                            {% if oge.is_video %}
+                                <span style="background: rgba(255, 153, 0, 0.1); color: #ff9900; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                                    <i class='bx bx-video'></i> Video
+                                </span>
+                            {% else %}
+                                <span style="background: rgba(67, 24, 255, 0.1); color: var(--primary-color); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                                    <i class='bx bx-image-alt'></i> Resim
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Kategori (Maçlar, Antrenman, Etkinlik) -->
+                        <td style="padding: 15px 10px; color: var(--text-muted); font-weight: 500;">
+                            {{ oge.get_kategori_display }}
+                        </td>
+
+                        <!-- Eklenme Tarihi -->
+                        <td style="padding: 15px 10px; color: var(--text-main); font-weight: 500;">
+                            {{ oge.oluşturma_tarihi|date:"d M Y" }}
+                        </td>
+
+                        <!-- İşlemler -->
+                        <td style="padding: 15px 10px; text-align: center;">
+                            <button style="border: none; background: transparent; color: var(--text-muted); cursor: pointer; margin: 0 5px; font-size: 18px;" title="Düzenle"><a href="{% url 'dashboard:galeri_duzenle' oge.pk %}" 
+   style="color: var(--text-muted); text-decoration: none; margin: 0 5px; font-size: 18px; transition: color 0.2s;"
+   onmouseover="this.style.color='var(--primary-color)'" 
+   onmouseout="this.style.color='var(--text-muted)'"
+   title="Düzenle">
+    <i class='bx bx-edit-alt'></i>
+</a></i></button>
+                            <button style="border: none; background: transparent; color: var(--text-muted); cursor: pointer; margin: 0 5px; font-size: 18px;" title="Sil"><a href="{% url 'dashboard:galeri_sil' oge.pk %}" 
+   onclick="return confirm('Bu görseli kalıcı olarak silmek istediğinize emin misiniz?')"
+   style="color: var(--text-muted); text-decoration: none; margin: 0 5px; font-size: 18px; transition: color 0.2s;"
+   onmouseover="this.style.color='#ee5d50'" 
+   onmouseout="this.style.color='var(--text-muted)'"
+   title="Sil">
+    <i class='bx bx-trash'></i>
+</a></button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="padding: 15px 10px; text-align: center; color: var(--text-muted);">
+                            <div style="padding: 20px 0;">
+                                <i class='bx bx-images' style="font-size: 48px; color: #e2e8f0; margin-bottom: 10px;"></i>
+                                <p>Galeriye henüz hiçbir medya eklenmemiş.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}{{ baslik }} - Dashboard{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+        <a href="javascript:history.back()" style="color: var(--text-muted); font-size: 24px;"><i class='bx bx-arrow-back'></i></a>
+        <h1 class="page-title" style="margin-bottom: 0;">{{ baslik }}</h1>
+    </div>
+
+    <div class="table-card" style="padding: 40px;">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-main);">
+                        {{ field.label }}
+                    </label>
+                    <div class="custom-form-field">
+                        {{ field }}
+                    </div>
+                    {% if field.errors %}
+                        <small style="color: #ee5d50;">{{ field.errors }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div style="margin-top: 30px; display: flex; gap: 15px;">
+                <button type="submit" style="background-color: var(--primary-color); color: white; border: none; padding: 12px 30px; border-radius: 10px; cursor: pointer; font-weight: 600;">
+                    Kaydet ve Yayınla
+                </button>
+                <a href="javascript:history.back()" style="background-color: var(--bg-color); color: var(--text-main); text-decoration: none; padding: 12px 30px; border-radius: 10px; font-weight: 600;">
+                    İptal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Django form elemanlarını dashboard stiline uydurmak için */
+    .custom-form-field input, .custom-form-field textarea, .custom-form-field select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .custom-form-field input:focus { border-color: var(--primary-color); }
+</style>
+{% endblock %}

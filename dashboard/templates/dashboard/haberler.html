@@ -1,0 +1,73 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Haberler - Karabağlar SK{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
+        <h1 class="page-title" style="margin-bottom: 0;">Haber Yönetimi</h1>
+        <a href="{% url 'dashboard:haber_ekle' %}" 
+   style="background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(67, 24, 255, 0.15);"
+   onmouseover="this.style.opacity='0.9'; this.style.transform='translateY(-1px)'"
+   onmouseout="this.style.opacity='1'; this.style.transform='translateY(0)'">
+    <i class='bx bx-plus' style="font-size: 20px;"></i>Yeni Haber Ekle
+    </a>
+    </div>
+
+    <div class="table-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="color: var(--text-main); font-weight: 600;">Tüm Haberler</h3>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+                        <th style="padding: 15px 10px; font-weight: 500; width: 60px;">Görsel</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Başlık</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Yayın Tarihi</th>
+                        <th style="padding: 15px 10px; font-weight: 500;">Son Güncelleme</th>
+                        <th style="padding: 15px 10px; font-weight: 500; text-align: center;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for haber in haberler %}
+                    <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 15px 10px;">
+                            <div style="width: 45px; height: 45px; border-radius: 8px; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; color: var(--text-muted);">
+                                {% if haber.görsel %}
+                                    <img src="{{ haber.görsel.url }}" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ haber.başlık }}">
+                                {% else %}
+                                    <i class='bx bx-image'></i>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td style="padding: 15px 10px;">
+                            <div style="font-weight: 600; color: var(--text-main);">{{ haber.başlık }}</div>
+                        </td>
+                        <td style="padding: 15px 10px; color: var(--text-main); font-weight: 500;">{{ haber.yayınlama_tarihi|date:"d M Y" }}</td>
+                        <td style="padding: 15px 10px; color: var(--text-muted);">{{ haber.güncellenme_tarihi|date:"d M Y H:i" }}</td>
+                        <td style="padding: 15px 10px; text-align: center;">
+                            <button style="border: none; background: transparent; color: var(--text-muted); cursor: pointer; margin: 0 5px; font-size: 18px;" title="Düzenle"><a href="{% url 'dashboard:haber_duzenle' haber.pk %}" 
+   style="color: var(--text-muted); text-decoration: none; margin: 0 5px; font-size: 18px; transition: color 0.2s;"
+   onmouseover="this.style.color='var(--primary-color)'" 
+   onmouseout="this.style.color='var(--text-muted)'"
+   title="Düzenle">
+    <i class='bx bx-edit-alt'></i>
+</a></button>
+                            <button style="border: none; background: transparent; color: var(--text-muted); cursor: pointer; margin: 0 5px; font-size: 18px;" title="Sil"><a href="{% url 'dashboard:haber_sil' haber.pk %}" 
+   onclick="return confirm('Haberi silmek istiyor musunuz?')"
+   class="delete-btn">
+   <i class='bx bx-trash'></i>
+</a></i></button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="padding: 15px 10px; text-align: center; color: var(--text-muted);">Henüz hiç haber eklenmemiş.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
