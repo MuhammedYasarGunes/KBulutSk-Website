@@ -5,7 +5,7 @@ const PALETTES = [
   "linear-gradient(135deg,#8338ec 0%,#3a0ca3 100%)",
   "linear-gradient(135deg,#06ffa5 0%,#0096c7 100%)",
   "linear-gradient(135deg,#ff1744 0%,#ff6e6e 100%)",
-  "linear-gradient(135deg,#ddff00 0%,#b3cc00 100%)",
+  "linear-gradient(135deg,#00d9ff 0%,#b3cc00 100%)",
   "linear-gradient(135deg,#00d9ff 0%,#006b84 100%)"
 ];
 

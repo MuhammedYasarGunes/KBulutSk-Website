@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Sorun Giderme Testi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #1a1a1a; }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .success { color: #4caf50; }
+        .warning { color: #ff9800; }
+        .error { color: #f44336; }
+        .code {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+        button {
+            background: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #0b7dda;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Galeri Sorun Giderme Kontrol Listesi</h1>
+    
+    <div class="test-section">
+        <h2>1. Görsel Yükleme Kontrolü</h2>
+        <p>Browser DevTools Console'unda aşağıdaki kodu çalıştırın:</p>
+        <div class="code">
+// Resimler yüklendi mi kontrol et
+const images = document.querySelectorAll('.gallery-item img');
+images.forEach((img, i) => {
+  const hasSrc = img.src && !img.src.includes('data:image/svg');
+  const hasDataSrc = img.dataset.src;
+  console.log(`Resim ${i}:`, {
+    placeholder: img.src.substring(0, 30) + '...',
+    dataSrc: hasDataSrc ? 'VAR ✓' : 'YOK ✗',
+    loaded: hasSrc ? 'YÜKLENDI ✓' : 'BEKLENIYOR ⏳'
+  });
+});
+        </div>
+        <p><strong>Beklenen sonuç:</strong> Tüm resimlerin <code>dataSrc: VAR</code> olmalı ve visible olanlar <code>loaded: YÜKLENDI</code> olmalı.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Lazy Loading Başladı mı?</h2>
+        <p>Console'da yazın:</p>
+        <div class="code">
+// Lazy loader nesnesi var mı kontrol et
+if (window.GalleryLazyLoader) {
+  console.log('✓ GalleryLazyLoader sınıfı yüklendi');
+  console.log('✓ Lazy loading aktif');
+} else {
+  console.log('✗ GalleryLazyLoader bulunamadı - lazy-loading.js yüklü mü?');
+}
+        </div>
+        <p><strong>Beklenen sonuç:</strong> <span class="success">✓ Yüklendi</span> mesajı görülmeli.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>3. IntersectionObserver Desteği</h2>
+        <p>Console'da yazın:</p>
+        <div class="code">
+// Browser'ın IntersectionObserver desteği
+console.log(
+  'IntersectionObserver destekleniyor mu?',
+  'IntersectionObserver' in window ? '✓ EVET' : '✗ HAYIR'
+);
+        </div>
+        <p><strong>Beklenen sonuç:</strong> <span class="success">✓ EVET</span> çıkmalı (modern tarayıcılarda).</p>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Mobilde Lightbox Tam Ekran Testi</h2>
+        <p>Adımlar:</p>
+        <ol>
+            <li>Chrome DevTools'ta Device Mode'a geçin (F12 → Ctrl+Shift+M)</li>
+            <li>Herhangi bir galeri resmine tıklayın</li>
+            <li>Resmin tam ekranda, sapıtmadan gösterilip gösterilmediğini kontrol edin</li>
+            <li>Kapatma butonuna (×) tıklayın - kapanmalı</li>
+            <li>Ok tuşları (← →) ile resim geçişi çalışmalı</li>
+        </ol>
+        <p><strong>Beklenen sonuç:</strong> Tüm işlemler sorunsuz çalışmalı.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Network Sekmesi Kontrolü</h2>
+        <p>Adımlar:</p>
+        <ol>
+            <li>DevTools → Network sekmesi</li>
+            <li>Sayfayı yenile (F5)</li>
+            <li>Kaç resim indirileceğini sayın (başlangıçta 6-8 olmalı)</li>
+            <li>Sayfayı aşağı kaydırın</li>
+            <li>Yeni resimler indiriliyor mu kontrol edin (evet olmalı)</li>
+        </ol>
+        <p><strong>Beklenen sonuç:</strong> Başlangıçta az resim, sonra gerekli olduğunda yüklenme.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>6. Console Hataları Kontrolü</h2>
+        <p>Adımlar:</p>
+        <ol>
+            <li>DevTools → Console sekmesi</li>
+            <li>Red X işareti (hata) var mı kontrol edin</li>
+            <li>Yellow (uyarı) var mı kontrol edin</li>
+        </ol>
+        <p><strong>Beklenen sonuç:</strong> Hiç hata olmamalı. Uyarılar normal.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>🚀 Uygulanmış Düzeltmeler</h2>
+        <ul>
+            <li><span class="success">✓ Lazy-loading.js</span> - Placeholder check eklendi</li>
+            <li><span class="success">✓ style.css</span> - Lightbox mobil responsive</li>
+            <li><span class="success">✓ galeri.html</span> - Modal açılıp kapatılması düzeltildi</li>
+            <li><span class="success">✓ Scroll lock</span> - Mobilde overflow fixed</li>
+            <li><span class="success">✓ Aspect ratio</span> - width: auto ile korundu</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>❓ Sorun Giderme</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr style="border-bottom: 1px solid #ddd;">
+                <th style="text-align: left; padding: 10px;">Sorun</th>
+                <th style="text-align: left; padding: 10px;">Çözüm</th>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Resimler hala yüklenmiyorsa</td>
+                <td style="padding: 10px;">
+                    1. Resim URL'si doğru mu ({{ öğe.resim.url }})?<br>
+                    2. File permissions kontrol et<br>
+                    3. CORS hatası varsa backend log'unu kontrol et
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Mobilede scroll kilitlenmiş gibi</td>
+                <td style="padding: 10px;">
+                    1. Virtual keyboard kapanıyor mu?<br>
+                    2. Modal gerçekten kapalı mı? (classList kontrol et)<br>
+                    3. Browser cache temizle
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Lightbox resim sapıtıyor</td>
+                <td style="padding: 10px;">
+                    1. CSS width: 100% değil, width: auto olmalı ✓<br>
+                    2. height: auto olmalı ✓<br>
+                    3. max-height: calc(100vh - 110px) kontrol et
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Filtre yavaş çalışıyor</td>
+                <td style="padding: 10px;">
+                    1. Console.log debounce çalışıyor mu?<br>
+                    2. requestAnimationFrame tetikleniyor mu?<br>
+                    3. Çok fazla galeri öğesi var mı? (optimize gerek)
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Hızlı Test Komutları</h2>
+        <p>Console'da kopyala-yapıştır:</p>
+        <div class="code">
+// Tüm testleri çalıştır
+console.group('🔍 Galeri Diagnostics');
+
+// Test 1
+console.log('Test 1: IntersectionObserver', 'IntersectionObserver' in window ? '✓' : '✗');
+
+// Test 2
+const imgs = document.querySelectorAll('.gallery-item img[data-src]');
+console.log('Test 2: Data-src resimleri:', imgs.length, 'adet');
+
+// Test 3
+const loaded = document.querySelectorAll('.gallery-item img.loaded');
+console.log('Test 3: Yüklenen resimler:', loaded.length, 'adet');
+
+// Test 4
+console.log('Test 4: Modal aktif?', document.getElementById('lightboxModal')?.classList.contains('active'));
+
+console.groupEnd();
+        </div>
+    </div>
+
+    <div class="test-section" style="background: #e8f5e9; border-left: 4px solid #4caf50;">
+        <h2>✅ Kontrol Tamamlandı!</h2>
+        <p>Tüm düzeltmeler uygulanmıştır. Sayfayı yenileyerek test edin.</p>
+        <p><strong>Temel değişiklikler:</strong></p>
+        <ul style="margin: 10px 0;">
+            <li>Lazy-loading.js - placeholder check eklendi ✓</li>
+            <li>CSS - mobil lightbox responsive ✓</li>
+            <li>JavaScript - modal açılıp kapatılması düzeltildi ✓</li>
+            <li>Aspect ratio korundu (width: auto) ✓</li>
+            <li>Scroll lock mobilde düzeltildi ✓</li>
+        </ul>
+    </div>
+
+</body>
+</html>

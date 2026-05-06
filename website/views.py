@@ -115,22 +115,11 @@ def takim_oyuncular_api(request, takim_id):
 def kulup_yonetimi(request):
     sabit_uyeler = [
         {
-            'ad_soyad': 'Ömer AKGÜL',
+            'ad_soyad': 'Asutay UYAR',
             'unvan': 'Başkan',
-            'telefon': '+90 553 907 12 31',
-            'foto': static('img/yonetim/uye2.png'),
+            'telefon': '+90 542 276 91 12',
         },
-        {
-            'ad_soyad': 'Muhammed Furkan AKGÜL',
-            'unvan': 'Başkan Yardımcısı',
-            'telefon': '0533 669 78 47',
-            'foto': static('img/yonetim/uye1.png'),
-        },
-        {
-            'ad_soyad': 'Tülin AKGÜL',
-            'unvan': 'Sekreter',
-            'foto': static('img/yonetim/uye3.png'),
-        },
+        
     ]
 
     context = {
