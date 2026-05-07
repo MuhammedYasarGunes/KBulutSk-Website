@@ -62,6 +62,7 @@ class Haber(models.Model):
         return self.başlık
 
 
+import re
 class GaleriÖğesi(models.Model):
     KATEGORI_CHOICES = [
         ('maçlar', 'Maçlar'),
@@ -69,15 +70,12 @@ class GaleriÖğesi(models.Model):
         ('etkinlik', 'Etkinlikler'),
     ]
 
-    # Başlık zorunlu değil, toplu yüklemede otomatik atanabilir
     başlık = models.CharField(max_length=200, blank=True, null=True)
     açıklama = models.TextField(blank=True)
     kategori = models.CharField(max_length=50, choices=KATEGORI_CHOICES, default='maçlar')
 
-    # Eğer video eklersen, bu resim videonun kapak fotoğrafı olur!
     resim = CloudinaryField('image', blank=True, null=True) 
     
-    # Videolar için iki farklı seçenek
     video_dosya = CloudinaryField(resource_type="video", blank=True, null=True)
     video_url = models.URLField(blank=True, null=True, help_text="YouTube veya başka bir video linki")
 
@@ -93,17 +91,32 @@ class GaleriÖğesi(models.Model):
     # --- AKILLI KONTROLLER ---
     @property
     def is_video(self):
-        # Dosya veya link varsa bu bir videodur
         return bool(self.video_dosya or self.video_url)
 
     @property
     def has_youtube_video(self):
-        # Eğer video_url boşsa (None ise) hiç kontrol etmeden direkt False dön
         if not self.video_url:
             return False
-        
-        # Eğer doluysa içinde youtube geçiyor mu diye bak
         return "youtube.com" in self.video_url or "youtu.be" in self.video_url
+
+    # EKSİK OLAN VE EKLENEN KISIM BURASI
+    @property
+    def get_youtube_id(self):
+        if not self.video_url:
+            return None
+            
+        url = self.video_url.strip()
+        
+        if re.match(r'^[a-zA-Z0-9_-]{11}$', url):
+            return url
+            
+        pattern = r'(?:v=|\/embed\/|youtu\.be\/|\/shorts\/|\/live\/)([a-zA-Z0-9_-]{11})'
+        match = re.search(pattern, url)
+        
+        if match:
+            return match.group(1)
+            
+        return None
      
 class KurucuUye(models.Model):
     ad_soyad = models.CharField(max_length=120)

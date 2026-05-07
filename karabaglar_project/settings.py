@@ -16,7 +16,17 @@ DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://karabaglaratletiksk.up.railway.app',
+    # Canlı Sunucu (Production)
+    'https://kbulutsk.com',
+    'https://www.kbulutsk.com',
+    
+    # Eğer sitenin henüz SSL sertifikası (HTTPS) yoksa bunları da ekle:
+    'http://kbulutsk.com',
+    'http://www.kbulutsk.com',
+    
+    # Geliştirme (Localhost) Ortamı
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
 
 cloudinary.config(

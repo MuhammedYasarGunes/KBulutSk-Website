@@ -167,6 +167,14 @@
         lightboxImage.style.display = "none";
         lightboxYouTube.style.display = "none";
         lightboxLocalVideo.style.display = "none";
+        
+        // Instagram penceresini gizle ve linkini sıfırla (arkada ses çalmasın)
+        const igIframe = document.getElementById('lightboxInstagram');
+        if (igIframe) {
+            igIframe.style.display = 'none';
+            igIframe.src = "";
+        }
+        
         lightboxImage.src = "";
         lightboxYouTube.src = "";
         lightboxLocalVideo.pause();
@@ -198,7 +206,7 @@
 
             const liveMatch = u.pathname.match(/\/live\/([a-zA-Z0-9_-]{11})/);
             if (liveMatch) return liveMatch[1];
-        } catch {}
+        } catch { }
 
         const fallback = url.match(/(?:v=|\/embed\/|youtu\.be\/|\/shorts\/|\/live\/)([a-zA-Z0-9_-]{11})/);
         return fallback ? fallback[1] : null;
@@ -213,16 +221,21 @@
         if (!data) return;
 
         const type = data.dataset.type;
+        
+        // Önce her şeyi bir gizleyelim (öncekinden açık kalan olmasın)
         lightboxImage.style.display = "none";
         lightboxYouTube.style.display = "none";
         lightboxLocalVideo.style.display = "none";
+        const igIframe = document.getElementById('lightboxInstagram');
+        if (igIframe) igIframe.style.display = "none";
+        
         lightboxYouTube.src = "";
         lightboxLocalVideo.pause();
         lightboxVideoSource.src = "";
 
         if (type === "video") {
             const videoType = data.dataset.videoType;
-            const videoUrl = data.dataset.videoUrl;
+            const videoUrl = data.dataset.videoUrl; // Linkimiz zaten burada hazır!
 
             if (videoType === "youtube") {
                 const youtubeId = getYoutubeId(videoUrl);
@@ -234,8 +247,16 @@
                 lightboxVideoSource.src = videoUrl;
                 lightboxLocalVideo.load();
                 lightboxLocalVideo.style.display = "block";
-                lightboxLocalVideo.play().catch(() => {});
+                lightboxLocalVideo.play().catch(() => { });
                 openLightbox();
+            }
+            else if (videoType === 'instagram') {
+                // HATANIN DÜZELDİĞİ YER BURASI:
+                if (igIframe) {
+                    igIframe.src = videoUrl;
+                    igIframe.style.display = 'block';
+                    openLightbox();
+                }
             }
         } else {
             lightboxImage.src = data.dataset.imageUrl;

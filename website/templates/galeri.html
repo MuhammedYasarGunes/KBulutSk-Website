@@ -24,6 +24,8 @@
                     {% if galeri_öğeleri %}
                         {% for öğe in galeri_öğeleri %}
                             <div class="gallery-item lazy" data-category="{{ öğe.kategori }}" role="button" tabindex="0">
+                                
+                                <!-- GÖRSEL / KÜÇÜK RESİM KISMI -->
                                 {% if öğe.is_video %}
                                     {% if öğe.has_local_video %}
                                         <div class="gallery-image video-thumbnail loaded"
@@ -46,17 +48,24 @@
                                                 </svg>
                                             </div>
                                         </div>
+                                    {% elif öğe.has_instagram_post %}
+                                        <div class="gallery-image video-thumbnail loaded"
+                                             style="background-image: url('{% if öğe.resim %}{{ öğe.resim.url }}{% else %}https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg{% endif %}'); background-position: center; background-size: cover;">
+                                            <div class="play-button" style="background: rgba(225,48,108,0.8);">
+                                                <svg viewBox="0 0 24 24" fill="white" width="48" height="48" aria-hidden="true">
+                                                    <path d="M8 5v14l11-7z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
                                     {% endif %}
                                 {% else %}
-                                    {# FIX 1: SVG placeholder yüksekliği 199% → 100% düzeltildi #}
                                     <img data-src="{{ öğe.resim.url }}"
                                          src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23f0f0f0' width='100%25' height='100%25'/%3E%3C/svg%3E"
                                          alt="{% if öğe.başlık and öğe.başlık != 'None' %}{{ öğe.başlık }}{% else %}Galeri Görseli{% endif %}"
                                          class="gallery-image loading">
                                 {% endif %}
+
                                 <div class="gallery-overlay">
-                                    
-                                    {# DÜZELTİLEN KISIM BURASI: Sadece varsa göster #}
                                     {% if öğe.başlık and öğe.başlık != "None" %}
                                         <h3>{{ öğe.başlık }}</h3>
                                     {% endif %}
@@ -65,6 +74,7 @@
                                         <p>{{ öğe.açıklama }}</p>
                                     {% endif %}
 
+                                    <!-- DATA KISMI (Temizlendi) -->
                                     <div class="gallery-data"
                                        {% if öğe.is_video %}
                                            {% if öğe.has_local_video %}
@@ -73,6 +83,9 @@
                                            {% elif öğe.has_youtube_video %}
                                                data-video-type="youtube"
                                                data-video-url="{{ öğe.video_url }}"
+                                           {% elif öğe.has_instagram_post %}
+                                               data-video-type="instagram"
+                                               data-video-url="{{ öğe.get_instagram_embed_url }}"
                                            {% endif %}
                                        {% else %}
                                            data-image-url="{{ öğe.resim.url }}"
@@ -117,14 +130,20 @@
                        playsinline>
                     <source id="lightboxVideoSource" src="" type="video/mp4">
                 </video>
+
+                <iframe
+                    id="lightboxInstagram"
+                    title="Instagram gönderisi"
+                    style="display:none; width:400px; height:480px; max-width:100%; border:none; background:white; margin:0 auto;"
+                    frameborder="0"
+                    scrolling="no"
+                    allowtransparency="true">
+                </iframe>
             </div>
             <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Önceki">❮</button>
             <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Sonraki">❯</button>
         </div>
     </div>
-
-
-
 
 {% block extra_js %}
 <script src="{% static 'js/gallery-page.js' %}"></script>
