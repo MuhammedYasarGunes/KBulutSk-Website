@@ -1,3 +1,193 @@
+# ==================
+# Python & Virtual Environment
+# ==================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ==================
+# Django
+# ==================
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media
+/staticfiles
+*.pot
+
+# ==================
+# Environment Variables
+# ==================
+.env
+.env.local
+.env.*.local
+.venv
+.env.dev
+.env.prod
+.env.test
+
+# ==================
+# IDE & Editors
+# ==================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/
+*.code-workspace
+.vim/
+.emacs.d/
+tags
+.tags
+.tags_sorted_by_file
+
+# ==================
+# OS Specific Files
+# ==================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Windows
+Thumbs.db
+*.lnk
+.windows-build-tools/
+
+# Linux
+.directory
+
+# ==================
+# Testing & Coverage
+# ==================
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+htmlcov/
+
+# ==================
+# Dependencies
+# ==================
+pip-log.txt
+pip-delete-this-directory.txt
+.lock
+
+# ==================
+# Docker
+# ==================
+.docker/
+docker-compose.override.yml
+
+# ==================
+# Cloudinary & Media
+# ==================
+.cloudinary_cache/
+cloudinary.config.json
+
+# ==================
+# Compiled Files
+# ==================
+*.mo
+*.pot
+
+# ==================
+# Backup Files
+# ==================
+*.bak
+*.backup
+*~
+*.swp
+*.tmp
+
+# ==================
+# Node (eğer varsa)
+# ==================
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# ==================
+# Database Files
+# ==================
+*.db
+*.sqlite
+*.sqlite3
+*.psql_history
+
+# ==================
+# Misc
+# ==================
+.ipynb_checkpoints
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.env.example.local
+secrets.yaml
+deploy/secrets/
+*.pid
+*.seed
+.vscode-server/
+.vscode-server-insiders/
+
+# ==================
+# Local Development
+# ==================
+local_*.py
+tests/fixtures/tmp/
+.envrc
+
+# ==================
+# Generated Files
+# ==================
+*.html.gz
+*.js.gz
+*.css.gz
+
 *.pyc
 __pycache__/
 *.py[cod]
