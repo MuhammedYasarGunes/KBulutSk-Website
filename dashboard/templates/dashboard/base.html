@@ -12,7 +12,8 @@
     <!-- Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
-    <!-- İstersen bu CSS'i sonradan static/css/dashboard.css içine taşıyıp buraya <link href="{% static 'css/dashboard.css' %}"> olarak ekleyebilirsin -->
+    {# Bu CSS ileride static/css/dashboard.css dosyasına taşınabilir. Not: HTML yorumu içindeki şablon etiketleri de çalışır; #}
+    {# olmayan bir dosyaya verilen static etiketi, canlıda (DEBUG=False) panelin her sayfasında 500 hatasına yol açıyordu. #}
     <style>
         :root {
             --primary-color: #4318FF;
