@@ -15,7 +15,7 @@
             <div class="matches-container">
                 <div class="matches-lz">
                     {% for mac in tüm_maçlar %}
-                    <div class="match-card {% if mac.durum == 'kazanıldı' %}winner{% elif mac.durum == 'berabere' %}draw{% elif mac.durum == 'kaybedildi' %}loser{% else %}upcoming{% endif %}">
+                    <div class="match-card {% if mac.durum == 'kazanildi' %}winner{% elif mac.durum == 'berabere' %}draw{% elif mac.durum == 'kaybedildi' %}loser{% else %}upcoming{% endif %}">
                         <div class="match-date">{{ mac.tarih|date:"j E Y - H:i" }} | {{ mac.lig }}</div>
                         <div class="match-content">
                             <div class="team">
@@ -25,7 +25,7 @@
                             <div class="match-vs">
                                 <span class="vs-text">VS</span>
                                 <span class="match-status">
-                                    {% if mac.durum == 'kazanıldı' %}
+                                    {% if mac.durum == 'kazanildi' %}
                                         <span style="color: #00ffcc;">Kazanıldı</span>
                                     {% elif mac.durum == 'berabere' %}
                                         <span style="color: #00d9ff;">Berabere</span>

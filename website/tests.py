@@ -1,7 +1,9 @@
 import re
+from importlib import import_module
 from datetime import timedelta
 from pathlib import Path
 
+from django.apps import apps as django_apps
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.test import TestCase
@@ -140,3 +142,29 @@ class StatikDosyaTestleri(TestCase):
             if finders.find(yol) is None
         ]
         self.assertEqual(eksikler, [])
+
+
+class MacDurumuGorunumTestleri(TestCase):
+    """Panelden 'kazanildi' olarak girilen maç sitede 'Gelecek' değil 'Kazanıldı' görünmeli."""
+
+    def setUp(self):
+        self.takim = Takim.objects.create(ad="Test Takımı")
+
+    def mac(self, durum):
+        return Mac.objects.create(
+            takim=self.takim, ev_sahibi="Ev", misafir="Misafir", ev_sahibi_gol=3,
+            misafir_gol=1, tarih=timezone.now(), lig="Lig", durum=durum,
+        )
+
+    def test_kazanilan_mac_kazanildi_olarak_gorunur(self):
+        self.mac("kazanildi")
+        html = self.client.get(reverse("website:maclar")).content.decode()
+        self.assertIn("match-card winner", html)
+        self.assertNotIn("match-card upcoming", html)
+
+    def test_eski_kazanildi_kayitlari_migration_ile_duzelir(self):
+        migration = import_module("website.migrations.0003_kazanildi_degerini_duzelt")
+        eski = self.mac("kazanıldı")
+        migration.kazanildi_degerini_duzelt(django_apps, None)
+        eski.refresh_from_db()
+        self.assertEqual(eski.durum, "kazanildi")
