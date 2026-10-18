@@ -20,7 +20,7 @@
 - **Kulüp sayfaları:** ana sayfa, takım, maçlar, galeri, iletişim ve kulüp yönetimi
 - **Yönetim paneli** (`/dashboard/`): haber, oyuncu, takım, maç, galeri ve yönetim kurulu kayıtlarını ekleme, düzenleme ve silme; giriş zorunlu
 - **Galeri:** Cloudinary üzerinde fotoğraf ve video; her biçimdeki YouTube linkinden (watch, youtu.be, embed, shorts, live) video kimliği çıkarma
-- **Maç istatistikleri:** galibiyet, beraberlik ve mağlubiyet sayıları sonuçlardan otomatik hesaplanır
+- **Maç sonuçları:** kazanılan, berabere biten, kaybedilen ve gelecek maçlar ayrı renklerle; istatistikler sonuçlardan hesaplanır
 - **JSON API:** `GET /api/takim/<id>/oyuncular/` takımın oyuncularını döndürür
 
 ## Teknolojiler
@@ -72,10 +72,10 @@ python manage.py runserver
 pytest
 ```
 
-17 test şunları kapsar:
+19 test şunları kapsar:
 
 - tüm sayfaların açılması
-- maç istatistiklerinin doğru sayılması
+- maç istatistikleri ve maç durumlarının doğru görünmesi
 - JSON API (200 / 404 / 405)
 - YouTube link ayrıştırma
 - panelin giriş zorunluluğu ve formdan kayıt ekleme
