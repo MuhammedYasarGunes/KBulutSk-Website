@@ -1,0 +1,5 @@
+# Dil istatistiğinde projenin Python/Django olduğu görünsün:
+# şablonlar ve statik dosyalar sayılmaz.
+website/templates/** linguist-detectable=false
+dashboard/templates/** linguist-detectable=false
+website/static/** linguist-vendored

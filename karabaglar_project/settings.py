@@ -1,10 +1,9 @@
-import cloudinary
 from pathlib import Path
 import os
 from dotenv import load_dotenv
 import dj_database_url
-import cloudinary_storage
 import cloudinary
+import cloudinary_storage  # noqa: F401  (INSTALLED_APPS'teki depolama sınıfları için)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -15,19 +14,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
-CSRF_TRUSTED_ORIGINS = [
-    # Canlı Sunucu (Production)
-    'https://kbulutsk.com',
-    'https://www.kbulutsk.com',
-    
-    # Eğer sitenin henüz SSL sertifikası (HTTPS) yoksa bunları da ekle:
-    'http://kbulutsk.com',
-    'http://www.kbulutsk.com',
-    
-    # Geliştirme (Localhost) Ortamı
-    'http://localhost:8000',
-    'http://127.0.0.1:8000',
-]
+# Ortam değişkeni yoksa canlı alan adları ve localhost kullanılır (eski sabit listeyle aynı)
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    'CSRF_TRUSTED_ORIGINS',
+    'https://kbulutsk.com,https://www.kbulutsk.com,'
+    'http://kbulutsk.com,http://www.kbulutsk.com,'
+    'http://localhost:8000,http://127.0.0.1:8000',
+).split(',')
 
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),

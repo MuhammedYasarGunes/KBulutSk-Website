@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('website.urls')),
-path('dashboard/', include('dashboard.urls', namespace='dashboard')),
+    path('dashboard/', include('dashboard.urls', namespace='dashboard')),
 ]
 
 # Serve media files in development

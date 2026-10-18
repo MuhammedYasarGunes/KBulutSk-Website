@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from cloudinary.models import CloudinaryField
 
@@ -62,7 +64,6 @@ class Haber(models.Model):
         return self.başlık
 
 
-import re
 class GaleriÖğesi(models.Model):
     KATEGORI_CHOICES = [
         ('maçlar', 'Maçlar'),
@@ -99,7 +100,7 @@ class GaleriÖğesi(models.Model):
             return False
         return "youtube.com" in self.video_url or "youtu.be" in self.video_url
 
-    # EKSİK OLAN VE EKLENEN KISIM BURASI
+    # YouTube linkinden 11 karakterlik video kimliğini çıkarır (watch, youtu.be, embed, shorts, live)
     @property
     def get_youtube_id(self):
         if not self.video_url:

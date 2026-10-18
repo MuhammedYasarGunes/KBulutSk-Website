@@ -39,8 +39,8 @@ urlpatterns = [
     path('yonetim/ekle/', views.kurucu_uye_ekle, name='kurucu_uye_ekle'), # Eklendi
     path('yonetim/sil/<int:pk>/', views.kurucu_uye_sil, name='kurucu_uye_sil'),
     path('haberler/duzenle/<int:pk>/', views.haber_duzenle, name='haber_duzenle'),
-path('oyuncular/duzenle/<int:pk>/', views.oyuncu_duzenle, name='oyuncu_duzenle'),
-path('takimlar/duzenle/<int:pk>/', views.takim_duzenle, name='takim_duzenle'),
-path('maclar/duzenle/<int:pk>/', views.mac_duzenle, name='mac_duzenle'),
-path('galeri/duzenle/<int:pk>/', views.galeri_duzenle, name='galeri_duzenle'),
+    path('oyuncular/duzenle/<int:pk>/', views.oyuncu_duzenle, name='oyuncu_duzenle'),
+    path('takimlar/duzenle/<int:pk>/', views.takim_duzenle, name='takim_duzenle'),
+    path('maclar/duzenle/<int:pk>/', views.mac_duzenle, name='mac_duzenle'),
+    path('galeri/duzenle/<int:pk>/', views.galeri_duzenle, name='galeri_duzenle'),
 ]
